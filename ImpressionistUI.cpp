@@ -308,7 +308,8 @@ void ImpressionistUI::cb_brushAngleSlides(Fl_Widget* o, void* v)
 //-----------------------------------------------------------
 void ImpressionistUI::cb_alphaValueSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nAlphaValue = int(((Fl_Slider*)o)->value());
+	((ImpressionistUI*)(o->user_data()))->m_nAlphaValue = float(((Fl_Slider*)o)->value());
+
 }
 
 //---------------------------------- per instance functions --------------------------------------
