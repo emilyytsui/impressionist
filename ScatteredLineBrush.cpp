@@ -53,7 +53,6 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 
 
 	glEnd();
-	glEnd();
 }
 
 void ScatteredLineBrush::BrushEnd(const Point source, const Point target)

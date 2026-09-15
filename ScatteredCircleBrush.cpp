@@ -48,7 +48,7 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
         Point scatteredTarget(target.x + offsetX, target.y + offsetY);
 
         glBegin(GL_TRIANGLE_FAN);
-        SetColor(source);
+        SetColor(scatteredSource);
 
         // First vertex: the center of the circle.
         glVertex2d(scatteredTarget.x, scatteredTarget.y);
@@ -62,9 +62,10 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
 
             glVertex2f(x, y);
         }
-    }
 
-    glEnd();
+        glEnd();
+
+    }
 }
 
 void ScatteredCircleBrush::BrushEnd(const Point source, const Point target)
