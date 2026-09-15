@@ -301,6 +301,15 @@ void ImpressionistUI::cb_brushAngleSlides(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nBrushAngle = int(((Fl_Slider*)o)->value());
 }
 
+//-----------------------------------------------------------
+// Updates the alpha value to use from the value of the alpha
+// value slider
+// Called by the UI when the alpha value slider is moved
+//-----------------------------------------------------------
+void ImpressionistUI::cb_alphaValueSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nAlphaValue = int(((Fl_Slider*)o)->value());
+}
 
 //---------------------------------- per instance functions --------------------------------------
 
@@ -399,6 +408,25 @@ void ImpressionistUI::setBrushAngle(int angle)
 		m_BrushAngleSlider->value(m_nBrushAngle);
 }
 
+//-------------------------------------------------
+// Set the alpha value
+//-------------------------------------------------
+void ImpressionistUI::setAlphaValue(float alpha)
+{
+	m_nAlphaValue = alpha;
+
+	if (alpha <= 1.0)
+		m_AlphaValueSlider->value(m_nAlphaValue);
+}
+
+//------------------------------------------------
+// Return the alpha value
+//------------------------------------------------
+float ImpressionistUI::getAlphaValue()
+{
+	return m_nAlphaValue;
+}
+
 
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
@@ -463,6 +491,10 @@ ImpressionistUI::ImpressionistUI() {
 	// init values
 
 	m_nSize = 10;
+	m_nLineThickness = 1;
+	m_nBrushAngle = 0;
+	m_nAlphaValue = 1;
+
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(400, 325, "Brush Dialog");
@@ -508,13 +540,26 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAngleSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushAngleSlider->type(FL_HOR_NICE_SLIDER);
         m_BrushAngleSlider->labelfont(FL_COURIER);
-        m_BrushAngleSlider->labelsize(10);
+        m_BrushAngleSlider->labelsize(12);
 		m_BrushAngleSlider->minimum(0);
 		m_BrushAngleSlider->maximum(360);
 		m_BrushAngleSlider->step(1);
 		m_BrushAngleSlider->value(m_nBrushAngle);
 		m_BrushAngleSlider->align(FL_ALIGN_RIGHT);
 		m_BrushAngleSlider->callback(cb_brushAngleSlides);
+
+		// Add alpha value slider to the dialog
+		m_AlphaValueSlider = new Fl_Value_Slider(10, 200, 300, 20, "Alpha Value");
+		m_AlphaValueSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_AlphaValueSlider->type(FL_HOR_NICE_SLIDER);
+		m_AlphaValueSlider->labelfont(FL_COURIER);
+		m_AlphaValueSlider->labelsize(12);
+		m_AlphaValueSlider->minimum(0.0);
+		m_AlphaValueSlider->maximum(1.0);
+		m_AlphaValueSlider->step(0.01);
+		m_AlphaValueSlider->value(m_nAlphaValue);
+		m_AlphaValueSlider->align(FL_ALIGN_RIGHT);
+		m_AlphaValueSlider->callback(cb_alphaValueSlides);
 
     m_brushDialog->end();	
 
