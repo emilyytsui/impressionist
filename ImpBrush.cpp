@@ -44,13 +44,14 @@ void ImpBrush::SetColor (const Point source)
 {
 	ImpressionistDoc* pDoc = GetDocument();
 
-	static GLubyte color[4] = { 255, 0, 0, 127 };
+	GLubyte color[4];
 
-	// Copy the original pixel's red, green, and blue values
 	memcpy(color, pDoc->GetOriginalPixel(source), 3);
 
+	float alphaValue = pDoc->getAlphaValue();
+
 	// Convert the slider's 0–1 value to an alpha byte (0–255)
-	color[3] = static_cast<GLubyte>(pDoc->m_pUI->getAlphaValue() * 255.0f);
+	color[3] = GLubyte(alphaValue * 255.0f);
 
 	glColor4ubv(color);
 

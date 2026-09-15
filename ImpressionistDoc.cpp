@@ -107,6 +107,14 @@ int ImpressionistDoc::getBrushAngle()
 }
 
 //---------------------------------------------------------
+// Returns the alpha value.
+//---------------------------------------------------------
+float ImpressionistDoc::getAlphaValue()
+{
+	return m_pUI->getAlphaValue();
+}
+
+//---------------------------------------------------------
 // Load the specified image
 // This is called by the UI when the load image button is 
 // pressed.

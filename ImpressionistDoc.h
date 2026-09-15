@@ -29,6 +29,7 @@ public:
 	void	setSize(int size);				// set the UI size
 	int		getLineThickness();				// get the UI line thickness
 	int		getBrushAngle();				// get the UI brush angle
+	float	getAlphaValue();				// get the UI alpha value
 	char*	getImageName();					// get the current image name
 	
 

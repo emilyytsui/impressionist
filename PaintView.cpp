@@ -48,6 +48,9 @@ void PaintView::draw()
 	glDrawBuffer(GL_FRONT_AND_BACK);
 	#endif // !MESA
 
+	glEnable(GL_BLEND); // Activates color blending so transparency works.
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //  Sets the standard blending equation for translucent layering.
+
 	if(!valid())
 	{
 
@@ -60,9 +63,6 @@ void PaintView::draw()
 
 		glClear( GL_COLOR_BUFFER_BIT );
 	}
-
-	glEnable(GL_BLEND); // Activates color blending so transparency works.
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //  Sets the standard blending equation for translucent layering.
 
 	Point scrollpos;// = GetScrollPosition();
 	scrollpos.x = 0;
