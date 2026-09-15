@@ -7,6 +7,7 @@
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
 #include "linebrush.h"
+#include <cmath>
 
 extern float frand();
 
@@ -17,7 +18,11 @@ LineBrush::LineBrush(ImpressionistDoc* pDoc, char* name) :
 
 void LineBrush::BrushBegin(const Point source, const Point target)
 {
-	glLineWidth(1.0f);
+	ImpressionistDoc* pDoc = GetDocument();
+
+	int thickness = pDoc->getLineThickness();
+
+	glLineWidth((float)thickness);
 
 	BrushMove(source, target);
 }
@@ -34,11 +39,19 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	int size = pDoc->getSize();
 	float halfLength = size / 2.0f;
 
+	// Convert the slider angle from degrees to radians.
+	const float PI = 3.14159265f;
+	float angle = pDoc->getBrushAngle() * PI / 180.0f;
+
+	// Horizontal and vertical distances from the line's center.
+	float dx = halfLength * std::cos(angle);
+	float dy = halfLength * std::sin(angle);
+
 	glBegin(GL_LINES);
 	SetColor(source);
 
-	glVertex2f(target.x - halfLength, target.y);
-	glVertex2f(target.x + halfLength, target.y);
+	glVertex2f(target.x - dx, target.y - dy);
+	glVertex2f(target.x + dx, target.y + dy);
 
 	glEnd();
 }

@@ -7,6 +7,7 @@
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
 #include "scatteredlinebrush.h"
+#include <cmath>
 
 extern float frand();
 
@@ -17,7 +18,11 @@ ScatteredLineBrush::ScatteredLineBrush(ImpressionistDoc* pDoc, char* name) :
 
 void ScatteredLineBrush::BrushBegin(const Point source, const Point target)
 {
-	glLineWidth(1.0f);
+	ImpressionistDoc* pDoc = GetDocument();
+
+	int thickness = pDoc->getLineThickness();
+
+	glLineWidth((float)thickness);
 
 	BrushMove(source, target);
 }
@@ -35,6 +40,14 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 	float halfLength = size / 2.0f;
 	const int scatterCount = 3; // Number of lines to scatter
 
+	// Convert the slider angle from degrees to radians.
+	const float PI = 3.14159265f;
+	float angle = pDoc->getBrushAngle() * PI / 180.0f;
+
+	// Horizontal and vertical distances from the line's center.
+	float dx = halfLength * std::cos(angle);
+	float dy = halfLength * std::sin(angle);
+
 	glBegin(GL_LINES);
 
 	for (int i = 0; i < scatterCount; i++)
@@ -47,8 +60,8 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 
 		SetColor(scatteredSource);
 
-		glVertex2f(scatteredTarget.x - halfLength, scatteredTarget.y);
-		glVertex2f(scatteredTarget.x + halfLength, scatteredTarget.y);
+		glVertex2f(scatteredTarget.x - dx, scatteredTarget.y - dy);
+		glVertex2f(scatteredTarget.x + dx, scatteredTarget.y + dy);
 	}
 
 

@@ -91,6 +91,22 @@ int ImpressionistDoc::getSize()
 }
 
 //---------------------------------------------------------
+// Returns the line thickness of the brush.
+//---------------------------------------------------------
+int ImpressionistDoc::getLineThickness()
+{
+	return m_pUI->getLineThickness();
+}
+
+//---------------------------------------------------------
+// Returns the brush angle.
+//---------------------------------------------------------
+int ImpressionistDoc::getBrushAngle()
+{
+	return m_pUI->getBrushAngle();
+}
+
+//---------------------------------------------------------
 // Load the specified image
 // This is called by the UI when the load image button is 
 // pressed.
