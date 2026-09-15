@@ -37,21 +37,31 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
     const float PI = 3.14159265f;
     const int segments = 32;
     const float angle_step = (2.0f * PI) / segments;
+    const int scatterCount = 2;
 
-    glBegin(GL_TRIANGLE_FAN);
-    SetColor(source);
+    for (int i = 0; i < scatterCount; i++)
+    {
+        int offsetX = rand() % size - size / 2;
+        int offsetY = rand() % size - size / 2;
 
-    // First vertex: the center of the circle.
-    glVertex2d(target.x, target.y);
+        Point scatteredSource(source.x + offsetX, source.y + offsetY);
+        Point scatteredTarget(target.x + offsetX, target.y + offsetY);
 
-    // Remaining vertices: positions around its edge.
-    for (int i = 0; i <= segments; i++) {
-        float angle = i * angle_step;
+        glBegin(GL_TRIANGLE_FAN);
+        SetColor(source);
 
-        float x = target.x + radius * std::cosf(angle);
-        float y = target.y + radius * std::sinf(angle);
+        // First vertex: the center of the circle.
+        glVertex2d(scatteredTarget.x, scatteredTarget.y);
 
-        glVertex2f(x, y);
+        // Remaining vertices: positions around its edge.
+        for (int j = 0; j <= segments; j++) {
+            float angle = j * angle_step;
+
+            float x = scatteredTarget.x + radius * std::cos(angle);
+            float y = scatteredTarget.y + radius * std::sin(angle);
+
+            glVertex2f(x, y);
+        }
     }
 
     glEnd();

@@ -494,7 +494,7 @@ ImpressionistUI::ImpressionistUI() {
 	m_nSize = 10;
 	m_nLineThickness = 1;
 	m_nBrushAngle = 0;
-	m_nAlphaValue = 1;
+	m_nAlphaValue = 1.0;
 
 
 	// brush dialog definition

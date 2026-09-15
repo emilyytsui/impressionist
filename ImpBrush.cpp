@@ -44,7 +44,7 @@ void ImpBrush::SetColor (const Point source)
 {
 	ImpressionistDoc* pDoc = GetDocument();
 
-	GLubyte color[4];
+	static GLubyte color[4] = { 255, 0, 0, 127 };
 
 	// Copy the original pixel's red, green, and blue values
 	memcpy(color, pDoc->GetOriginalPixel(source), 3);

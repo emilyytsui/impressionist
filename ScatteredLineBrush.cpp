@@ -32,14 +32,27 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 	}
 
 	int size = pDoc->getSize();
-	double halfLength = size / 2.0;
+	float halfLength = size / 2.0f;
+	const int scatterCount = 3; // Number of lines to scatter
 
 	glBegin(GL_LINES);
-	SetColor(source);
 
-	glVertex2d(target.x - halfLength, target.y);
-	glVertex2d(target.x + halfLength, target.y);
+	for (int i = 0; i < scatterCount; i++)
+	{
+		int offsetX = rand() % size - size / 2;
+		int offsetY = rand() % size - size / 2;
 
+		Point scatteredSource(source.x + offsetX, source.y + offsetY);
+		Point scatteredTarget(target.x + offsetX, target.y + offsetY);
+
+		SetColor(scatteredSource);
+
+		glVertex2f(scatteredTarget.x - halfLength, scatteredTarget.y);
+		glVertex2f(scatteredTarget.x + halfLength, scatteredTarget.y);
+	}
+
+
+	glEnd();
 	glEnd();
 }
 

@@ -17,7 +17,7 @@ ScatteredPointBrush::ScatteredPointBrush(ImpressionistDoc* pDoc, char* name) :
 
 void ScatteredPointBrush::BrushBegin(const Point source, const Point target)
 {
-	glLineWidth(1.0f);
+	glPointSize(1.0f);
 
 	BrushMove(source, target);
 }
@@ -32,13 +32,22 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 	}
 
 	int size = pDoc->getSize();
-	double halfLength = size / 2.0;
+	const int scatterCount = 15; // Number of points to scatter
 
-	glBegin(GL_LINES);
-	SetColor(source);
+	glBegin(GL_POINTS);
 
-	glVertex2d(target.x - halfLength, target.y);
-	glVertex2d(target.x + halfLength, target.y);
+
+	for (int i = 0; i < scatterCount; i++) {
+		// Randomly offset the source and target points within the brush size
+		int offsetX = rand() % size - size / 2;
+		int offsetY = rand() % size - size / 2;
+
+		Point scatteredSource(source.x + offsetX, source.y + offsetY);
+		Point scatteredTarget(target.x + offsetX, target.y + offsetY);
+
+		SetColor(scatteredSource);
+		glVertex2d(scatteredTarget.x, scatteredTarget.y);
+	}
 
 	glEnd();
 }
