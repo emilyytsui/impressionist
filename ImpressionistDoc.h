@@ -25,13 +25,19 @@ public:
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType
+
 	int		getBrushDirection();			// get the UI brush direction
 	void	setBrushDirection(int direction);	// called by the UI to set the brush direction
+
 	int		getSize();						// get the UI size
 	void	setSize(int size);				// set the UI size
+
 	int		getLineThickness();				// get the UI line thickness
 	int		getBrushAngle();				// get the UI brush angle
 	float	getAlphaValue();				// get the UI alpha value
+
+	float	getGradientAngle(const Point source);// get the gradient angle
+
 	char*	getImageName();					// get the current image name
 	
 

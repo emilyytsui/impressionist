@@ -41,7 +41,21 @@ void LineBrush::BrushMove(const Point source, const Point target)
 
 	// Convert the slider angle from degrees to radians
 	const float PI = 3.14159265f;
-	float angle = pDoc->getBrushAngle() * PI / 180.0f;
+	float angle;
+
+	//if (pDoc->getBrushDirection() == BRUSH_DIRECTION_SLIDER) // Slider angle
+	//{
+	//	
+	//}
+	//else 
+	if (pDoc->getBrushDirection() == BRUSH_DIRECTION_GRADIENT) // Gradient angle
+	{
+		angle = pDoc->getGradientAngle(source);
+	}
+	else
+	{
+		angle = pDoc->getBrushAngle() * PI / 180.0f;
+	}
 
 	// Horizontal and vertical distances from the line's center
 	float dx = halfLength * std::cos(angle);

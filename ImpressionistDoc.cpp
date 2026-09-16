@@ -20,6 +20,8 @@
 #include "ScatteredLineBrush.h"
 #include "ScatteredCircleBrush.h"
 
+#include <cmath>
+
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
 
@@ -135,6 +137,64 @@ float ImpressionistDoc::getAlphaValue()
 {
 	return m_pUI->getAlphaValue();
 }
+
+//---------------------------------------------------------
+// Returns the gradient angle.
+//---------------------------------------------------------
+float ImpressionistDoc::getGradientAngle(const Point source)
+{
+	const float PI = 3.14159265f;
+
+	// Use the slider angle if no gradient can be determined.
+	float fallbackAngle = getBrushAngle() * PI / 180.0f;
+
+	if (m_ucBitmap == NULL)
+		return fallbackAngle;
+
+	const int sobelX[3][3] = {
+		{-1,  0,  1},
+		{-2,  0,  2},
+		{-1,  0,  1}
+	};
+
+	const int sobelY[3][3] = {
+		{-1, -2, -1},
+		{ 0,  0,  0},
+		{ 1,  2,  1}
+	};
+
+	float gx = 0.0f;
+	float gy = 0.0f;
+
+	// Examine the 3 × 3 neighborhood around the source pixel.
+	for (int y = -1; y <= 1; ++y)
+	{
+		for (int x = -1; x <= 1; ++x)
+		{
+			GLubyte* pixel = GetOriginalPixel(
+				source.x + x,
+				source.y + y
+			);
+
+			// Convert RGB to Y-channel brightness.
+			float brightness =
+				0.299f * pixel[0]
+				+ 0.587f * pixel[1]
+				+ 0.114f * pixel[2];
+
+			gx += brightness * sobelX[y + 1][x + 1];
+			gy += brightness * sobelY[y + 1][x + 1];
+		}
+	}
+
+	// Flat areas have no meaningful gradient direction.
+	if (gx * gx + gy * gy < 0.000001f)
+		return fallbackAngle;
+
+	// Turn 90 degrees to point perpendicular to the gradient.
+	return std::atan2(gy, gx) + PI / 2.0f;
+}
+
 
 //---------------------------------------------------------
 // Load the specified image

@@ -42,11 +42,6 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 
 	// Convert the slider angle from degrees to radians
 	const float PI = 3.14159265f;
-	float angle = pDoc->getBrushAngle() * PI / 180.0f;
-
-	// Horizontal and vertical distances from the line's center
-	float dx = halfLength * std::cos(angle);
-	float dy = halfLength * std::sin(angle);
 
 	glBegin(GL_LINES);
 
@@ -57,6 +52,21 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 
 		Point scatteredSource(source.x + offsetX, source.y + offsetY);
 		Point scatteredTarget(target.x + offsetX, target.y + offsetY);
+
+        float angle;
+
+        if (pDoc->getBrushDirection() == BRUSH_DIRECTION_GRADIENT) // Gradient angle
+        {
+            angle = pDoc->getGradientAngle(source);
+        }
+        else
+        {
+            angle = pDoc->getBrushAngle() * PI / 180.0f;
+        }
+
+        // Horizontal and vertical distances from the line's center
+        float dx = halfLength * std::cos(angle);
+        float dy = halfLength * std::sin(angle);
 
 		SetColor(scatteredSource);
 
