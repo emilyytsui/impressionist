@@ -10,6 +10,8 @@
 #include "paintview.h"
 #include "ImpBrush.h"
 
+#include <cmath>
+
 
 #define LEFT_MOUSE_DOWN		1
 #define LEFT_MOUSE_DRAG		2
@@ -37,6 +39,8 @@ PaintView::PaintView(int			x,
 {
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
+
+	m_isRightDragging = false;
 
 }
 
@@ -131,13 +135,51 @@ void PaintView::draw()
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
+			if (m_pDoc->getBrushDirection() == BRUSH_DIRECTION_RIGHT_MOUSE) {
+				m_rightDragStart = target;
+				m_isRightDragging = true;
+			}
 
 			break;
 		case RIGHT_MOUSE_DRAG:
+			if (m_isRightDragging) {
+				// Restore the painting, removing the previous guide.
+				RestoreContent();
+				glDrawBuffer(GL_FRONT_AND_BACK);
 
+				// Draw a temporary red guide.
+				glLineWidth(1.0f);
+				glColor3ub(255, 0, 0);
+
+				glBegin(GL_LINES);
+				glVertex2d(m_rightDragStart.x, m_rightDragStart.y);
+				glVertex2d(target.x, target.y);
+				glEnd();
+			}
 			break;
 		case RIGHT_MOUSE_UP:
+			if (m_isRightDragging) {
+				double dx = target.x - m_rightDragStart.x;
+				double dy = target.y - m_rightDragStart.y;
 
+				// A click without movement should keep the old angle.
+				if (dx != 0.0 || dy != 0.0) {
+					const double PI = 3.141592653589793;
+
+					double angle = std::atan2(dy, dx) * 180.0 / PI;
+
+					if (angle < 0.0) {
+						angle += 360.0;
+					}
+
+					m_pDoc->m_pUI->setBrushAngle(
+						static_cast<int>(angle)
+					);
+				}
+
+				m_isRightDragging = false;
+				RestoreContent();
+			}
 			break;
 
 		default:

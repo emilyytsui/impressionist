@@ -43,7 +43,8 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	const float PI = 3.14159265f;
 	float angle;
 
-	if (pDoc->getBrushDirection() == BRUSH_DIRECTION_SLIDER) // Slider angle
+	if (pDoc->getBrushDirection() == BRUSH_DIRECTION_SLIDER || // Slider angle
+		pDoc->getBrushDirection() == BRUSH_DIRECTION_RIGHT_MOUSE) // Right mouse drag angle
 	{
 		angle = pDoc->getBrushAngle() * PI / 180.0f;
 	}

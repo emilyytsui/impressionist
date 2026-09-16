@@ -43,6 +43,9 @@ private:
 			m_nWindowWidth, 
 			m_nWindowHeight;
 
+	Point	m_rightDragStart;
+	bool	m_isRightDragging;
+
 };
 
 #endif
