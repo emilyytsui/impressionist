@@ -22,6 +22,17 @@ enum
 };
 
 
+// Each brush direction has an associated constant.
+enum
+{
+	BRUSH_DIRECTION_SLIDER = 0,
+	BRUSH_DIRECTION_RIGHT_MOUSE,
+	BRUSH_DIRECTION_CURSOR,
+	BRUSH_DIRECTION_GRADIENT,
+	NUM_BRUSH_DIRECTION // Make sure this stays at the end!
+};
+
+
 class ImpressionistDoc; // Pre-declaring class
 
 class Point 

@@ -231,7 +231,6 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 }
 
 
-
 //-----------------------------------------------------------
 // Brings up an about dialog box
 // Called by the UI when the about menu item is chosen
@@ -257,6 +256,24 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 
 	pDoc->setBrushType(type);
 }
+
+//------- UI should keep track of the current for all the controls for answering the query from Doc ---------
+//-------------------------------------------------------------
+// Sets the brush direction to use to the one chosen in the 
+// brush direction choice.  
+// Called by the UI when a brush direction is chosen in the 
+// brush direction choice
+//-------------------------------------------------------------
+void ImpressionistUI::cb_brushDirectionChoice(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* pUI = ((ImpressionistUI*)(o->user_data()));
+	ImpressionistDoc* pDoc = pUI->getDocument();
+
+	int type = (int)v;
+
+	pDoc->setBrushDirection(type);
+}
+
 
 //------------------------------------------------------------
 // Clears the paintview canvas.
@@ -458,6 +475,15 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {0}
 };
 
+// Brush direction choice menu definition
+Fl_Menu_Item ImpressionistUI::brushDirectionMenu[NUM_BRUSH_DIRECTION + 1] = {
+  {"Slider",		FL_ALT + 'hi', (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_DIRECTION_SLIDER},
+  {"Right Mouse",	FL_ALT + 'hi', (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_DIRECTION_RIGHT_MOUSE},
+  {"Cursor",		FL_ALT + 'hi', (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_DIRECTION_CURSOR},
+  {"Gradient",		FL_ALT + 'hi', (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_DIRECTION_GRADIENT},
+  {0}
+};
+
 
 
 //----------------------------------------------------
@@ -509,9 +535,15 @@ ImpressionistUI::ImpressionistUI() {
 		m_ClearCanvasButton->user_data((void*)(this));
 		m_ClearCanvasButton->callback(cb_clear_canvas_button);
 
+		// Add a brush direction choice to the dialog
+		m_BrushDirectionChoice = new Fl_Choice(110, 50, 150, 25, "&Brush Direction");
+		m_BrushDirectionChoice->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BrushDirectionChoice->menu(brushDirectionMenu);
+		m_BrushDirectionChoice->callback(cb_brushDirectionChoice);
+
 
 		// Add brush size slider to the dialog 
-		m_BrushSizeSlider = new Fl_Value_Slider(10, 80, 300, 20, "Size");
+		m_BrushSizeSlider = new Fl_Value_Slider(10, 90, 300, 20, "Size");
 		m_BrushSizeSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushSizeSlider->type(FL_HOR_NICE_SLIDER);
         m_BrushSizeSlider->labelfont(FL_COURIER);
@@ -524,7 +556,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->callback(cb_sizeSlides);
 
 		// Add line thickness slider to the dialog
-		m_LineThicknessSlider = new Fl_Value_Slider(10, 120, 300, 20, "Line Thickness");
+		m_LineThicknessSlider = new Fl_Value_Slider(10, 130, 300, 20, "Line Thickness");
 		m_LineThicknessSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_LineThicknessSlider->type(FL_HOR_NICE_SLIDER);
         m_LineThicknessSlider->labelfont(FL_COURIER);
@@ -537,7 +569,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_LineThicknessSlider->callback(cb_lineThicknessSlides);
 
 		// Add brush angle slider to the dialog
-		m_BrushAngleSlider = new Fl_Value_Slider(10, 160, 300, 20, "Brush Angle");
+		m_BrushAngleSlider = new Fl_Value_Slider(10, 170, 300, 20, "Brush Angle");
 		m_BrushAngleSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushAngleSlider->type(FL_HOR_NICE_SLIDER);
         m_BrushAngleSlider->labelfont(FL_COURIER);
@@ -550,7 +582,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAngleSlider->callback(cb_brushAngleSlides);
 
 		// Add alpha value slider to the dialog
-		m_AlphaValueSlider = new Fl_Value_Slider(10, 200, 300, 20, "Alpha Value");
+		m_AlphaValueSlider = new Fl_Value_Slider(10, 210, 300, 20, "Alpha Value");
 		m_AlphaValueSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_AlphaValueSlider->type(FL_HOR_NICE_SLIDER);
 		m_AlphaValueSlider->labelfont(FL_COURIER);

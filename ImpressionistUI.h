@@ -33,9 +33,13 @@ public:
 	PaintView*			m_paintView;
 	OriginalView*		m_origView;
 
-// for brush dialog
+    // for brush dialog
 	Fl_Window*			m_brushDialog;
 	Fl_Choice*			m_BrushTypeChoice;
+
+	// for brush direction dialog
+	Fl_Window* m_brushDirectionDialog;
+	Fl_Choice* m_BrushDirectionChoice;
 
 	Fl_Slider*			m_BrushSizeSlider;
 	Fl_Slider*			m_LineThicknessSlider;
@@ -76,6 +80,7 @@ private:
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
 	static Fl_Menu_Item		brushTypeMenu[NUM_BRUSH_TYPE+1];
+	static Fl_Menu_Item		brushDirectionMenu[NUM_BRUSH_DIRECTION+1];
 
 	static ImpressionistUI*	whoami(Fl_Menu_* o);
 
@@ -88,6 +93,7 @@ private:
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
+	static void	cb_brushDirectionChoice(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
 	static void	cb_sizeSlides(Fl_Widget* o, void* v);
 	static void	cb_lineThicknessSlides(Fl_Widget* o, void* v);

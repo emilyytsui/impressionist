@@ -83,6 +83,16 @@ void ImpressionistDoc::setBrushType(int type)
 }
 
 //---------------------------------------------------------
+// Called by the UI when the user changes the brush
+// direction.
+// direction: one of the defined stroke directions.
+//---------------------------------------------------------
+void ImpressionistDoc::setBrushDirection(int direction)
+{
+	m_pCurrentBrushDirection = ImpBrush::c_pBrushes[direction];
+}
+
+//---------------------------------------------------------
 // Returns the size of the brush.
 //---------------------------------------------------------
 int ImpressionistDoc::getSize()
