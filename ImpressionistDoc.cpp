@@ -58,6 +58,10 @@ ImpressionistDoc::ImpressionistDoc()
 
 	m_nBrushDirection = BRUSH_DIRECTION_SLIDER;
 
+	// initialize cursor angle
+	m_previousCursor = Point(0, 0);
+	m_cursorAngle = 0.0f;
+
 }
 
 
@@ -194,6 +198,40 @@ float ImpressionistDoc::getGradientAngle(const Point source)
 	// Turn 90 degrees to point perpendicular to the gradient.
 	return std::atan2(gy, gx) + PI / 2.0f;
 }
+
+
+void ImpressionistDoc::beginCursorStroke(const Point target)
+{
+	m_previousCursor = target;
+
+	// Use the slider angle until the cursor starts moving.
+	const float PI = 3.14159265f;
+	m_cursorAngle = getBrushAngle() * PI / 180.0f;
+}
+
+
+void ImpressionistDoc::updateCursorDirection(const Point target)
+{
+	float dx = static_cast<float>(target.x - m_previousCursor.x);
+	float dy = static_cast<float>(target.y - m_previousCursor.y);
+
+	if (dx != 0.0f || dy != 0.0f) {
+		m_cursorAngle = std::atan2(dy, dx);
+	}
+
+	m_previousCursor = target;
+}
+
+
+//---------------------------------------------------------
+// Returns the cursor angle.
+//---------------------------------------------------------
+float ImpressionistDoc::getCursorAngle()
+{
+	return m_cursorAngle;
+}
+
+
 
 
 //---------------------------------------------------------

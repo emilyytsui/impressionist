@@ -43,12 +43,15 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	const float PI = 3.14159265f;
 	float angle;
 
-	//if (pDoc->getBrushDirection() == BRUSH_DIRECTION_SLIDER) // Slider angle
-	//{
-	//	
-	//}
-	//else 
-	if (pDoc->getBrushDirection() == BRUSH_DIRECTION_GRADIENT) // Gradient angle
+	if (pDoc->getBrushDirection() == BRUSH_DIRECTION_SLIDER) // Slider angle
+	{
+		angle = pDoc->getBrushAngle() * PI / 180.0f;
+	}
+	else if (pDoc->getBrushDirection() == BRUSH_DIRECTION_CURSOR) // Cursor direction
+	{
+		angle = pDoc->getCursorAngle();
+	}
+	else if (pDoc->getBrushDirection() == BRUSH_DIRECTION_GRADIENT) // Gradient angle
 	{
 		angle = pDoc->getGradientAngle(source);
 	}

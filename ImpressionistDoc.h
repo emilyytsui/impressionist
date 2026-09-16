@@ -36,7 +36,12 @@ public:
 	int		getBrushAngle();				// get the UI brush angle
 	float	getAlphaValue();				// get the UI alpha value
 
-	float	getGradientAngle(const Point source);// get the gradient angle
+	float	getGradientAngle(const Point source); // get the gradient angle
+
+	void beginCursorStroke(const Point target);
+	void updateCursorDirection(const Point target);
+	float getCursorAngle(); // get the cursor angle
+
 
 	char*	getImageName();					// get the current image name
 	
@@ -73,6 +78,8 @@ public:
 
 private:
 	char			m_imageName[256];
+	Point			m_previousCursor;
+	float			m_cursorAngle;
 
 };
 

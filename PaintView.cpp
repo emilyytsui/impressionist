@@ -108,10 +108,21 @@ void PaintView::draw()
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
-			m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+			if (m_pDoc->getBrushDirection() == BRUSH_DIRECTION_CURSOR)
+			{
+				m_pDoc->beginCursorStroke(target);
+			}
+
+			m_pDoc->m_pCurrentBrush->BrushBegin(source, target);
 			break;
+
 		case LEFT_MOUSE_DRAG:
-			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
+			if (m_pDoc->getBrushDirection() == BRUSH_DIRECTION_CURSOR)
+			{
+				m_pDoc->updateCursorDirection(target);
+			}
+
+			m_pDoc->m_pCurrentBrush->BrushMove(source, target);
 			break;
 		case LEFT_MOUSE_UP:
 			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
@@ -165,20 +176,24 @@ int PaintView::handle(int event)
 	case FL_DRAG:
 		coord.x = Fl::event_x();
 		coord.y = Fl::event_y();
-		if (Fl::event_button()>1)
-			eventToDo=RIGHT_MOUSE_DRAG;
+		if (Fl::event_state(FL_BUTTON3))
+			eventToDo = RIGHT_MOUSE_DRAG;
+		else if (Fl::event_state(FL_BUTTON1))
+			eventToDo = LEFT_MOUSE_DRAG;
 		else
-			eventToDo=LEFT_MOUSE_DRAG;
+			break;
 		isAnEvent=1;
 		redraw();
 		break;
 	case FL_RELEASE:
 		coord.x = Fl::event_x();
 		coord.y = Fl::event_y();
-		if (Fl::event_button()>1)
-			eventToDo=RIGHT_MOUSE_UP;
+		if (Fl::event_button() == FL_RIGHT_MOUSE)
+			eventToDo = RIGHT_MOUSE_UP;
+		else if (Fl::event_button() == FL_LEFT_MOUSE)
+			eventToDo = LEFT_MOUSE_UP;
 		else
-			eventToDo=LEFT_MOUSE_UP;
+			break;
 		isAnEvent=1;
 		redraw();
 		break;
