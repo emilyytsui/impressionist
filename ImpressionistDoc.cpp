@@ -54,6 +54,8 @@ ImpressionistDoc::ImpressionistDoc()
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
 
+	m_nBrushDirection = BRUSH_DIRECTION_SLIDER;
+
 }
 
 
@@ -82,6 +84,16 @@ void ImpressionistDoc::setBrushType(int type)
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[type];
 }
 
+
+//---------------------------------------------------------
+// Returns the brush direction.
+//---------------------------------------------------------
+int ImpressionistDoc::getBrushDirection()
+{
+	return m_nBrushDirection;
+}
+
+
 //---------------------------------------------------------
 // Called by the UI when the user changes the brush
 // direction.
@@ -89,7 +101,7 @@ void ImpressionistDoc::setBrushType(int type)
 //---------------------------------------------------------
 void ImpressionistDoc::setBrushDirection(int direction)
 {
-	m_pCurrentBrushDirection = ImpBrush::c_pBrushes[direction];
+	m_nBrushDirection = direction;
 }
 
 //---------------------------------------------------------

@@ -269,9 +269,10 @@ void ImpressionistUI::cb_brushDirectionChoice(Fl_Widget* o, void* v)
 	ImpressionistUI* pUI = ((ImpressionistUI*)(o->user_data()));
 	ImpressionistDoc* pDoc = pUI->getDocument();
 
-	int type = (int)v;
+	Fl_Choice* brushDirectionChoice = (Fl_Choice*)o;
+	int directionIndex = brushDirectionChoice->value();
 
-	pDoc->setBrushDirection(type);
+	pDoc->setBrushDirection(directionIndex);
 }
 
 
@@ -477,10 +478,10 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
 
 // Brush direction choice menu definition
 Fl_Menu_Item ImpressionistUI::brushDirectionMenu[NUM_BRUSH_DIRECTION + 1] = {
-  {"Slider",		FL_ALT + 'hi', (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_DIRECTION_SLIDER},
-  {"Right Mouse",	FL_ALT + 'hi', (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_DIRECTION_RIGHT_MOUSE},
-  {"Cursor",		FL_ALT + 'hi', (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_DIRECTION_CURSOR},
-  {"Gradient",		FL_ALT + 'hi', (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_DIRECTION_GRADIENT},
+  {"Slider"},
+  {"Right Mouse"},
+  {"Cursor"},
+  {"Gradient"},
   {0}
 };
 
@@ -540,6 +541,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushDirectionChoice->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushDirectionChoice->menu(brushDirectionMenu);
 		m_BrushDirectionChoice->callback(cb_brushDirectionChoice);
+		m_BrushDirectionChoice->value(BRUSH_DIRECTION_SLIDER); // Set default value to "Slider"
 
 
 		// Add brush size slider to the dialog 
