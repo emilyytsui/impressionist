@@ -107,7 +107,15 @@ void PaintView::draw()
 
 		Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
 		Point target( coord.x, m_nWindowHeight - coord.y );
-		
+
+		// Rectangle containing the visible painting.
+		glScissor(
+			0,                                  
+			m_nWindowHeight - m_nDrawHeight,     
+			m_nDrawWidth,                       
+			m_nDrawHeight                        
+		);
+
 		// This is the event handler
 		switch (eventToDo) 
 		{
@@ -117,7 +125,10 @@ void PaintView::draw()
 				m_pDoc->beginCursorStroke(target);
 			}
 
+			glEnable(GL_SCISSOR_TEST);
 			m_pDoc->m_pCurrentBrush->BrushBegin(source, target);
+			glDisable(GL_SCISSOR_TEST);
+
 			break;
 
 		case LEFT_MOUSE_DRAG:
@@ -126,10 +137,15 @@ void PaintView::draw()
 				m_pDoc->updateCursorDirection(target);
 			}
 
+			glEnable(GL_SCISSOR_TEST);
 			m_pDoc->m_pCurrentBrush->BrushMove(source, target);
+			glDisable(GL_SCISSOR_TEST);
+
 			break;
 		case LEFT_MOUSE_UP:
-			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
+			glEnable(GL_SCISSOR_TEST);
+			m_pDoc->m_pCurrentBrush->BrushEnd(source, target);
+			glDisable(GL_SCISSOR_TEST);
 
 			SaveCurrentContent();
 			RestoreContent();
