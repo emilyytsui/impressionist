@@ -20,6 +20,8 @@
 #include "ScatteredLineBrush.h"
 #include "ScatteredCircleBrush.h"
 #include "TriangleBrush.h"
+#include "SquareBrush.h"
+#include "StarBrush.h"
 
 #include <cmath>
 
@@ -55,6 +57,10 @@ ImpressionistDoc::ImpressionistDoc()
 		= new ScatteredCircleBrush( this, "Scattered Circles" );
 	ImpBrush::c_pBrushes[BRUSH_TRIANGLES]			
 		= new TriangleBrush( this, "Triangles" );
+	ImpBrush::c_pBrushes[BRUSH_SQUARES]
+		= new SquareBrush(this, "Squares");
+	ImpBrush::c_pBrushes[BRUSH_STARS]
+		= new StarBrush(this, "Stars");
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
