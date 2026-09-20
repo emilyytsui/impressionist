@@ -57,7 +57,7 @@
     <ClCompile Include="TriangleBrush.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SqaureBrush.cpp">
+    <ClCompile Include="RingBrush.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StarBrush.cpp">
@@ -107,7 +107,7 @@
     <ClInclude Include="TriangleBrush.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SquareBrush.h">
+    <ClInclude Include="RingBrush.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StarBrush.h">
