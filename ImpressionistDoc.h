@@ -42,6 +42,8 @@ public:
 	void updateCursorDirection(const Point target);
 	float getCursorAngle(); // get the cursor angle
 
+	void swapContent();
+
 
 	char*	getImageName();					// get the current image name
 	

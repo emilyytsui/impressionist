@@ -287,6 +287,16 @@ void ImpressionistUI::cb_clear_canvas_button(Fl_Widget* o, void* v)
 	pDoc->clearCanvas();
 }
 
+//------------------------------------------------------------
+// Swaps the content of the paintview and original image.
+//------------------------------------------------------------
+
+void ImpressionistUI::cb_swap_content(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc* pDoc = whoami(o)->getDocument();
+	pDoc->swapContent();
+}
+
 
 //-----------------------------------------------------------
 // Updates the brush size to use from the value of the size
@@ -453,7 +463,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Load Image...",	FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_load_image },
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
-		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
+		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas},
+		{"&Swap Content", 0, (Fl_Callback*)ImpressionistUI::cb_swap_content, 0, FL_MENU_DIVIDER },
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },

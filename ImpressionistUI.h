@@ -99,6 +99,7 @@ private:
 	static void	cb_lineThicknessSlides(Fl_Widget* o, void* v);
 	static void	cb_brushAngleSlides(Fl_Widget* o, void* v);
 	static void	cb_alphaValueSlides(Fl_Widget* o, void* v);
+	static void cb_swap_content(Fl_Menu_* o, void* v);
 };
 
 #endif

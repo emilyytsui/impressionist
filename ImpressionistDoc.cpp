@@ -358,3 +358,21 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 	return GetOriginalPixel( p.x, p.y );
 }
 
+//----------------------------------------------------------------
+// Swap the contents of the painting window and the contents of 
+// the original image window
+//----------------------------------------------------------------
+void ImpressionistDoc::swapContent()
+{
+	if (m_ucBitmap == NULL || m_ucPainting == NULL) {
+		fl_alert("No image loaded.");
+		return;
+	}
+
+	unsigned char* temp = m_ucBitmap;
+	m_ucBitmap = m_ucPainting;
+	m_ucPainting = temp;
+
+	m_pUI->m_origView->refresh();
+	m_pUI->m_paintView->refresh();
+}
