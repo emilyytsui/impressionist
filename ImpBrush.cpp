@@ -66,9 +66,8 @@ void ImpBrush::SetColor(const Point source)
 
     for (int channel = 0; channel < 3; ++channel)
     {
-        double value =
-            sampledColor[channel] *
-            pDoc->m_pUI->m_rgbSliders[channel]->value();
+        float value = static_cast<float>(sampledColor[channel]) *
+            static_cast<float>(pDoc->m_pUI->m_rgbSliders[channel]->value());
 
         if (value < 0.0f)
             value = 0.0f;
