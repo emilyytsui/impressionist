@@ -22,6 +22,9 @@ OriginalView::OriginalView(int			x,
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
 
+	m_markerX = -1;
+	m_markerY = -1;
+
 }
 
 void OriginalView::draw()
@@ -75,6 +78,17 @@ void OriginalView::draw()
 		glDrawBuffer( GL_BACK );
 		glDrawPixels( drawWidth, drawHeight, GL_RGB, GL_UNSIGNED_BYTE, bitstart );
 
+		if (m_markerX >= 0 && m_markerX < drawWidth &&
+			m_markerY >= 0 && m_markerY < drawHeight)
+		{
+			glPointSize(7.0f);
+			glColor3ub(255, 0, 0);
+
+			glBegin(GL_POINTS);
+			glVertex2i(m_markerX, m_nWindowHeight - m_markerY);
+			glEnd();
+		}
+
 	}
 			
 	glFlush();
@@ -89,5 +103,12 @@ void OriginalView::resizeWindow(int	width,
 								int	height)
 {
 	resize(x(), y(), width, height);
+}
+
+void OriginalView::setMarker(int x, int y)
+{
+	m_markerX = x;
+	m_markerY = y;
+	redraw();
 }
 

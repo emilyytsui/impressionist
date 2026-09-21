@@ -216,6 +216,33 @@ void PaintView::draw()
 
 int PaintView::handle(int event)
 {
+	OriginalView* original = m_pDoc->m_pUI->m_origView;
+
+	// Hide the marker when the mouse leaves.
+	if (event == FL_LEAVE)
+	{
+		original->setMarker(-1, -1);
+		return 1;
+	}
+
+	// Update the marker while hovering, clicking, or dragging.
+	if (event == FL_ENTER || event == FL_MOVE ||
+		event == FL_PUSH || event == FL_DRAG ||
+		event == FL_RELEASE)
+	{
+		int mouseX = Fl::event_x();
+		int mouseY = Fl::event_y();
+
+		// Drag events can continue outside the painting window.
+		if (mouseX < 0 || mouseX >= w() ||
+			mouseY < 0 || mouseY >= h())
+		{
+			mouseX = -1;
+		}
+
+		original->setMarker(mouseX, mouseY);
+	}
+
 	switch(event)
 	{
 	case FL_ENTER:

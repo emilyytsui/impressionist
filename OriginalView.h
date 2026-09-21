@@ -32,9 +32,14 @@ public:
 
 	ImpressionistDoc*	m_pDoc;
 
+	void setMarker(int x, int y);
+
 private:
 	int	m_nWindowWidth, 
-		m_nWindowHeight;
+		m_nWindowHeight,
+
+		m_markerX, 
+		m_markerY;
 
 };
 
