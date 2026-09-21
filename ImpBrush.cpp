@@ -40,19 +40,48 @@ char* ImpBrush::BrushName(void)
 // which is the coord at the original window to sample 
 // the color from
 //----------------------------------------------------
-void ImpBrush::SetColor (const Point source)
+//void ImpBrush::SetColor (const Point source)
+//{
+//	ImpressionistDoc* pDoc = GetDocument();
+//
+//	GLubyte color[4];
+//
+//	memcpy(color, pDoc->GetOriginalPixel(source), 3);
+//
+//	float alphaValue = pDoc->getAlphaValue();
+//
+//	// Convert the slider's 0–1 value to an alpha byte (0–255)
+//	color[3] = GLubyte(alphaValue * 255.0f);
+//
+//	glColor4ubv(color);
+//
+//}
+
+void ImpBrush::SetColor(const Point source)
 {
-	ImpressionistDoc* pDoc = GetDocument();
+    ImpressionistDoc* pDoc = GetDocument();
 
-	GLubyte color[4];
+    GLubyte* sampledColor = pDoc->GetOriginalPixel(source);
+    GLubyte color[4];
 
-	memcpy(color, pDoc->GetOriginalPixel(source), 3);
+    for (int channel = 0; channel < 3; ++channel)
+    {
+        double value =
+            sampledColor[channel] *
+            pDoc->m_pUI->m_rgbSliders[channel]->value();
 
-	float alphaValue = pDoc->getAlphaValue();
+        if (value < 0.0f)
+            value = 0.0f;
 
-	// Convert the slider's 0–1 value to an alpha byte (0–255)
-	color[3] = GLubyte(alphaValue * 255.0f);
+        if (value > 255.0f)
+            value = 255.0f;
 
-	glColor4ubv(color);
+        color[channel] = static_cast<GLubyte>(value + 0.5f);
+    }
 
+    color[3] = static_cast<GLubyte>(
+        pDoc->getAlphaValue() * 255.0f + 0.5f
+        );
+
+    glColor4ubv(color);
 }

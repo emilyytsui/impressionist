@@ -545,7 +545,7 @@ ImpressionistUI::ImpressionistUI() {
 
 
 	// brush dialog definition
-	m_brushDialog = new Fl_Window(400, 325, "Brush Dialog");
+	m_brushDialog = new Fl_Window(400, 375, "Brush Dialog");
 		// Add a brush type choice to the dialog
 		m_BrushTypeChoice = new Fl_Choice(50,10,150,25,"&Brush");
 		m_BrushTypeChoice->user_data((void*)(this));	// record self to be used by static callback functions
@@ -615,6 +615,24 @@ ImpressionistUI::ImpressionistUI() {
 		m_AlphaValueSlider->value(m_nAlphaValue);
 		m_AlphaValueSlider->align(FL_ALIGN_RIGHT);
 		m_AlphaValueSlider->callback(cb_alphaValueSlides);
+
+		// Add RGB channels
+		const char* rgbLabels[3] = { "Red", "Green", "Blue" };
+
+		for (int channel = 0; channel < 3; ++channel)
+		{
+			m_rgbSliders[channel] = new Fl_Value_Slider(
+				10, 250 + channel * 40, 300, 20,
+				rgbLabels[channel]
+			);
+
+			m_rgbSliders[channel]->type(FL_HOR_NICE_SLIDER);
+			m_rgbSliders[channel]->minimum(0.0);
+			m_rgbSliders[channel]->maximum(2.0);
+			m_rgbSliders[channel]->step(0.01);
+			m_rgbSliders[channel]->value(1.0);
+			m_rgbSliders[channel]->align(FL_ALIGN_RIGHT);
+		}
 
     m_brushDialog->end();	
 

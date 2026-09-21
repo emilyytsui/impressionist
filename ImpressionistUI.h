@@ -47,6 +47,8 @@ public:
 	Fl_Slider*			m_AlphaValueSlider;
 	Fl_Button*          m_ClearCanvasButton;
 
+	Fl_Value_Slider*	m_rgbSliders[3];
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -67,6 +69,7 @@ public:
 
 	float				getAlphaValue();
 	void				setAlphaValue(float alpha);
+
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
