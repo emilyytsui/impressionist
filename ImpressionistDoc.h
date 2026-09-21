@@ -10,6 +10,8 @@
 #include "impressionist.h"
 #include "bitmap.h"
 
+#include <vector>
+
 class ImpressionistUI;
 
 class ImpressionistDoc 
@@ -44,6 +46,8 @@ public:
 
 	void swapContent();
 
+	void saveUndoState();
+	void undo();
 
 	char*	getImageName();					// get the current image name
 	
@@ -82,6 +86,8 @@ private:
 	char			m_imageName[256];
 	Point			m_previousCursor;
 	float			m_cursorAngle;
+
+	std::vector<unsigned char> m_undoPainting;
 
 };
 

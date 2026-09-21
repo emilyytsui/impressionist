@@ -120,6 +120,8 @@ void PaintView::draw()
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
+			m_pDoc->saveUndoState();
+
 			if (m_pDoc->getBrushDirection() == BRUSH_DIRECTION_CURSOR)
 			{
 				m_pDoc->beginCursorStroke(target);

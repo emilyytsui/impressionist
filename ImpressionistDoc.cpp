@@ -24,6 +24,7 @@
 #include "StarBrush.h"
 
 #include <cmath>
+#include <cstring>
 
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
@@ -261,6 +262,8 @@ int ImpressionistDoc::loadImage(char *iname)
 		return 0;
 	}
 
+	m_undoPainting.clear();
+
 	// reflect the fact of loading the new image
 	m_nWidth		= width;
 	m_nPaintWidth	= width;
@@ -315,6 +318,7 @@ int ImpressionistDoc::saveImage(char *iname)
 //-----------------------------------------------------------------
 int ImpressionistDoc::clearCanvas() 
 {
+	m_undoPainting.clear();
 
 	// Release old storage
 	if ( m_ucPainting ) 
@@ -369,10 +373,45 @@ void ImpressionistDoc::swapContent()
 		return;
 	}
 
+	m_undoPainting.clear();
+
 	unsigned char* temp = m_ucBitmap;
 	m_ucBitmap = m_ucPainting;
 	m_ucPainting = temp;
 
 	m_pUI->m_origView->refresh();
+	m_pUI->m_paintView->refresh();
+}
+
+//----------------------------------------------------------------
+// Save the current state of the painting for undo functionality
+//----------------------------------------------------------------
+void ImpressionistDoc::saveUndoState()
+{
+	if (m_ucPainting == NULL)
+		return;
+
+	const std::size_t bytes =
+		static_cast<std::size_t>(m_nPaintWidth) *
+		m_nPaintHeight * 3;
+
+	m_undoPainting.assign(
+		m_ucPainting,
+		m_ucPainting + bytes
+	);
+}
+
+void ImpressionistDoc::undo()
+{
+	if (m_ucPainting == NULL || m_undoPainting.empty())
+		return;
+
+	std::memcpy(
+		m_ucPainting,
+		m_undoPainting.data(),
+		m_undoPainting.size()
+	);
+
+	m_undoPainting.clear();
 	m_pUI->m_paintView->refresh();
 }
