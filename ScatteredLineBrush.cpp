@@ -38,7 +38,7 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 
 	int size = pDoc->getSize();
 	float halfLength = size / 2.0f;
-	const int scatterCount = 3; // Number of lines to scatter
+	const int scatterCount = 2; // Number of lines to scatter
 
 	// Convert the slider angle from degrees to radians
 	const float PI = 3.14159265f;

@@ -32,7 +32,7 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 	}
 
 	int size = pDoc->getSize();
-	const int scatterCount = 15; // Number of points to scatter
+	const int scatterCount = 45; // Number of points to scatter
 
 	glBegin(GL_POINTS);
 
