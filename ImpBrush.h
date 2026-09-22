@@ -21,6 +21,8 @@ enum
 	BRUSH_TRIANGLES,
 	BRUSH_RINGS,
 	BRUSH_STARS,
+	BRUSH_BLUR,
+	BRUSH_SHARPEN,
 	NUM_BRUSH_TYPE // Make sure this stays at the end!
 };
 

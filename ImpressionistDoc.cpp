@@ -22,6 +22,7 @@
 #include "TriangleBrush.h"
 #include "RingBrush.h"
 #include "StarBrush.h"
+#include "FilterBrush.h"
 
 #include <cmath>
 #include <cstring>
@@ -62,6 +63,10 @@ ImpressionistDoc::ImpressionistDoc()
 		= new RingBrush(this, "Rings");
 	ImpBrush::c_pBrushes[BRUSH_STARS]
 		= new StarBrush(this, "Stars");
+	ImpBrush::c_pBrushes[BRUSH_BLUR]
+		= new FilterBrush(this, "Blur", false);
+	ImpBrush::c_pBrushes[BRUSH_SHARPEN]
+		= new FilterBrush(this, "Sharpen", true);
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];

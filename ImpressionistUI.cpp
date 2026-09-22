@@ -521,6 +521,8 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Triangles",			FL_ALT+'t',	(Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_TRIANGLES},
   {"Rings",				FL_ALT+'r',	(Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_RINGS},
   {"Stars",				FL_ALT+'s',	(Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_STARS},
+  {"Blur", 0, (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_BLUR},
+  {"Sharpen", 0, (Fl_Callback*)ImpressionistUI::cb_brushChoice, (void*)BRUSH_SHARPEN},
   {0}
 };
 
@@ -647,7 +649,7 @@ ImpressionistUI::ImpressionistUI() {
 		// Add RGB channels
 		const char* rgbLabels[3] = { "Red", "Green", "Blue" };
 
-		for (int channel = 0; channel < 3; ++channel)
+		for (int channel = 0; channel < 3; channel++)
 		{
 			m_rgbSliders[channel] = new Fl_Value_Slider(
 				10, 250 + channel * 40, 300, 20,
@@ -655,6 +657,8 @@ ImpressionistUI::ImpressionistUI() {
 			);
 
 			m_rgbSliders[channel]->type(FL_HOR_NICE_SLIDER);
+			m_rgbSliders[channel]->labelfont(FL_COURIER);
+			m_rgbSliders[channel]->labelsize(12);
 			m_rgbSliders[channel]->minimum(0.0);
 			m_rgbSliders[channel]->maximum(2.0);
 			m_rgbSliders[channel]->step(0.01);
