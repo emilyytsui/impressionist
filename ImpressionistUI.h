@@ -49,6 +49,9 @@ public:
 
 	Fl_Value_Slider*	m_rgbSliders[3];
 
+	Fl_Value_Slider* m_dissolveSlider;
+	Fl_Window* m_dissolveDialog;
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -69,6 +72,7 @@ public:
 
 	float				getAlphaValue();
 	void				setAlphaValue(float alpha);
+
 
 
 private:
@@ -104,6 +108,8 @@ private:
 	static void	cb_alphaValueSlides(Fl_Widget* o, void* v);
 	static void cb_swap_content(Fl_Menu_* o, void* v);
 	static void cb_undo(Fl_Menu_* o, void* v);
+	static void cb_dissolve_dialog(Fl_Menu_* o, void* v);
+	static void cb_dissolve(Fl_Widget* o, void* v);
 };
 
 #endif

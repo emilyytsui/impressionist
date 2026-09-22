@@ -330,18 +330,44 @@ void PaintView::SaveCurrentContent()
 
 void PaintView::RestoreContent()
 {
-	glDrawBuffer(GL_BACK);
+	//glDrawBuffer(GL_BACK);
 
-	glClear( GL_COLOR_BUFFER_BIT );
+	//glClear( GL_COLOR_BUFFER_BIT );
 
-	glRasterPos2i( 0, m_nWindowHeight - m_nDrawHeight );
-	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-	glDrawPixels( m_nDrawWidth, 
-				  m_nDrawHeight, 
-				  GL_RGB, 
-				  GL_UNSIGNED_BYTE, 
-				  m_pPaintBitstart);
+	//glRasterPos2i( 0, m_nWindowHeight - m_nDrawHeight );
+	//glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	//glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+	//glDrawPixels( m_nDrawWidth, 
+	//			  m_nDrawHeight, 
+	//			  GL_RGB, 
+	//			  GL_UNSIGNED_BYTE, 
+	//			  m_pPaintBitstart);
 
 //	glDrawBuffer(GL_FRONT);
+
+	glDrawBuffer(GL_BACK);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glRasterPos2i(
+		0,
+		m_nWindowHeight - m_nDrawHeight
+	);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glPixelStorei(
+		GL_UNPACK_ROW_LENGTH,
+		m_pDoc->m_nPaintWidth
+	);
+
+	glDrawBuffer(GL_FRONT_AND_BACK);
+
+	glDrawPixels(
+		m_nDrawWidth,
+		m_nDrawHeight,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		m_pPaintBitstart
+	);
+
+	glDrawBuffer(GL_BACK);
 }

@@ -263,6 +263,7 @@ int ImpressionistDoc::loadImage(char *iname)
 	}
 
 	m_undoPainting.clear();
+	m_dissolveBase.clear();
 
 	// reflect the fact of loading the new image
 	m_nWidth		= width;
@@ -374,6 +375,7 @@ void ImpressionistDoc::swapContent()
 	}
 
 	m_undoPainting.clear();
+	m_dissolveBase.clear();
 
 	unsigned char* temp = m_ucBitmap;
 	m_ucBitmap = m_ucPainting;
@@ -414,4 +416,95 @@ void ImpressionistDoc::undo()
 
 	m_undoPainting.clear();
 	m_pUI->m_paintView->refresh();
+}
+
+// Dissolve a second image into the original, which brushes sample from.
+// Center the second image and crop anything outside the original.
+int ImpressionistDoc::dissolveImage(char* filename, float amount)
+{
+	if (m_ucBitmap == NULL)
+	{
+		fl_alert("Load the original image first.");
+		return 0;
+	}
+
+	int secondWidth = 0;
+	int secondHeight = 0;
+
+	unsigned char* secondImage =
+		readBMP(filename, secondWidth, secondHeight);
+
+	if (secondImage == NULL ||
+		secondWidth <= 0 || secondHeight <= 0)
+	{
+		delete[] secondImage;
+		fl_alert("Could not load the second BMP.");
+		return 0;
+	}
+
+	if (amount < 0.0f)
+		amount = 0.0f;
+
+	if (amount > 1.0f)
+		amount = 1.0f;
+
+	// Keep the first image so loading another BMP replaces the second image.
+	const std::size_t bytes =
+		static_cast<std::size_t>(m_nWidth) * m_nHeight * 3;
+	if (m_dissolveBase.empty())
+		m_dissolveBase.assign(m_ucBitmap, m_ucBitmap + bytes);
+
+	// Always start from the first image, not the previous blend.
+	unsigned char* dissolvedImage = new unsigned char[bytes];
+	std::memcpy(dissolvedImage, m_dissolveBase.data(), bytes);
+
+	// Center the second image over the original.
+	int offsetX = (m_nWidth - secondWidth) / 2;
+	int offsetY = (m_nHeight - secondHeight) / 2;
+
+	for (int y = 0; y < m_nHeight; ++y)
+	{
+		int secondY = y - offsetY;
+
+		// No overlap on this row: keep the original.
+		if (secondY < 0 || secondY >= secondHeight)
+			continue;
+
+		for (int x = 0; x < m_nWidth; ++x)
+		{
+			int secondX = x - offsetX;
+
+			// No overlap at this pixel: keep the original.
+			if (secondX < 0 || secondX >= secondWidth)
+				continue;
+
+			std::size_t originalIndex =
+				(static_cast<std::size_t>(y) * m_nWidth + x) * 3;
+
+			std::size_t secondIndex =
+				(static_cast<std::size_t>(secondY) *
+					secondWidth + secondX) * 3;
+
+			// Blend the overlapping pixels.
+			for (int channel = 0; channel < 3; ++channel)
+			{
+				float value =
+					(1.0f - amount) *
+					m_dissolveBase[originalIndex + channel] +
+					amount *
+					secondImage[secondIndex + channel];
+
+				dissolvedImage[originalIndex + channel] =
+					static_cast<unsigned char>(value + 0.5f);
+			}
+		}
+	}
+
+	delete[] secondImage;
+
+	// Replace the source image that both OriginalView and the brushes use.
+	delete[] m_ucBitmap;
+	m_ucBitmap = dissolvedImage;
+	m_pUI->m_origView->refresh();
+	return 1;
 }

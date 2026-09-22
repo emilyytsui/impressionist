@@ -49,6 +49,8 @@ public:
 	void saveUndoState();
 	void undo();
 
+	int dissolveImage(char* filename, float amount);
+
 	char*	getImageName();					// get the current image name
 	
 
@@ -88,6 +90,7 @@ private:
 	float			m_cursorAngle;
 
 	std::vector<unsigned char> m_undoPainting;
+	std::vector<unsigned char> m_dissolveBase;
 
 };
 

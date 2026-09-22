@@ -208,6 +208,11 @@ void ImpressionistUI::cb_brushes(Fl_Menu_* o, void* v)
 	whoami(o)->m_brushDialog->show();
 }
 
+void ImpressionistUI::cb_dissolve_dialog(Fl_Menu_* o, void* v)
+{
+	whoami(o)->m_dissolveDialog->show();
+}
+
 //------------------------------------------------------------
 // Clears the paintview canvas.
 // Called by the UI when the clear canvas menu item is chosen
@@ -227,6 +232,7 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 {
 	whoami(o)->m_mainWindow->hide();
 	whoami(o)->m_brushDialog->hide();
+	whoami(o)->m_dissolveDialog->hide();
 
 }
 
@@ -343,6 +349,27 @@ void ImpressionistUI::cb_alphaValueSlides(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_undo(Fl_Menu_* o, void* v)
 {
 	whoami(o)->getDocument()->undo();
+}
+
+// Dissolve 2 images
+void ImpressionistUI::cb_dissolve(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* ui =
+		static_cast<ImpressionistUI*>(o->user_data());
+
+	char* filename = fl_file_chooser(
+		"Choose second image",
+		"*.bmp",
+		""
+	);
+
+	if (filename == NULL)
+		return;
+
+	ui->getDocument()->dissolveImage(
+		filename,
+		static_cast<float>(ui->m_dissolveSlider->value())
+	);
 }
 
 //---------------------------------- per instance functions --------------------------------------
@@ -466,6 +493,7 @@ float ImpressionistUI::getAlphaValue()
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
 		{ "&Load Image...",	FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_load_image },
+		{ "&Dissolve...", 0, (Fl_Callback*)ImpressionistUI::cb_dissolve_dialog },
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas},
@@ -634,6 +662,29 @@ ImpressionistUI::ImpressionistUI() {
 			m_rgbSliders[channel]->align(FL_ALIGN_RIGHT);
 		}
 
-    m_brushDialog->end();	
+	m_brushDialog->end();
+
+	// Dissolve has its own dialog, opened from the File menu.
+	m_dissolveDialog = new Fl_Window(400, 120, "Dissolve");
+		m_dissolveSlider = new Fl_Value_Slider(
+			10, 20, 300, 20, "Amount"
+		);
+
+		m_dissolveSlider->type(FL_HOR_NICE_SLIDER);
+		m_dissolveSlider->minimum(0.0);
+		m_dissolveSlider->maximum(1.0);
+		m_dissolveSlider->step(0.01);
+		m_dissolveSlider->value(0.5);
+		m_dissolveSlider->align(FL_ALIGN_RIGHT);
+
+		Fl_Button* dissolveButton = new Fl_Button(
+			10, 65, 300, 30,
+			"Load BMP and Dissolve..."
+		);
+
+		dissolveButton->user_data(this);
+		dissolveButton->callback(cb_dissolve);
+
+	m_dissolveDialog->end();
 
 }
